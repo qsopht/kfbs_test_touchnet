@@ -21,7 +21,7 @@ $updater->initialize();
 	// Writes a form full of hidden fields and auto-submits it (via javascript).
 	// If javascript isn't available, displays the form in the browser with a submit 
 	// button so the user can click to continue.
-	function createForm_LSAMP( $atts ) {
+	function createForm_KFBS_TEST( $atts ) {
 	
 		// Parse the parameters sent in the shortcode (if any). Allows us to set values 
 		// in WordPress rather than here in the code.

@@ -62,7 +62,7 @@ $updater->initialize();
 		
 		// Form will auto-submit. User should never see it, but will be forwarded to upay 
 		// with all the data they've already posted.
-//		$formString .= '<script type="text/javascript">document.forms["upay"].submit();</script>';
+		$formString .= '<script type="text/javascript">document.forms["upay"].submit();</script>';
 		
 		echo $formString;
 

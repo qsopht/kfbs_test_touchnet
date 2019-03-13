@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: KFBSBoise State uPay Gravity Forms Extension for LSAMP
+Plugin Name: KFBS Touchnet plugin - based on Boise State uPay Gravity Forms Extension for LSAMP
 Description: Provides functions for use in uPay implementation for LSAMP.
 Version: 2.0.21
-Author: David Lentz, David Ferro
+Original Author: David Lentz, David Ferro
 */
 
 defined( 'ABSPATH' ) or die( 'No hackers' );
@@ -21,7 +21,7 @@ $updater->initialize();
 	// Writes a form full of hidden fields and auto-submits it (via javascript).
 	// If javascript isn't available, displays the form in the browser with a submit 
 	// button so the user can click to continue.
-	function createForm_LSAMP( $atts ) {
+	function createForm_KFBS_TEST( $atts ) {
 	
 		// Parse the parameters sent in the shortcode (if any). Allows us to set values 
 		// in WordPress rather than here in the code.
@@ -66,7 +66,7 @@ $updater->initialize();
 		
 		// Form will auto-submit. User should never see it, but will be forwarded to upay 
 		// with all the data they've already posted.
-//		$formString .= '<script type="text/javascript">document.forms["upay"].submit();</script>';
+		$formString .= '<script type="text/javascript">document.forms["upay"].submit();</script>';
 		
 		echo $formString;
 

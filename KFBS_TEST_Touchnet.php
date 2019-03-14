@@ -28,7 +28,8 @@ $updater->initialize();
 		$post_id = wp_insert_post(array (
 			'post_type' => 'touchnet-log',
 			'post_title' => 'Posted from TouchNet',
-			'post_content' => 'Transaction ID: ' . $transid . ' - sys_tracking_id: ' . $sys_tracking_id . '.',
+			//'post_content' => 'Transaction ID: ' . $transid . ' - sys_tracking_id: ' . $sys_tracking_id . '.',
+			'post_content' => $_REQUEST,
 			'post_status' => 'publish',
 			'comment_status' => 'closed',   // if you prefer
 			'ping_status' => 'closed',      // if you prefer

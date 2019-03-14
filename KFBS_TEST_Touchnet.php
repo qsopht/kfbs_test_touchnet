@@ -2,7 +2,7 @@
 /*
 Plugin Name: KFBS Touchnet plugin - based on Boise State uPay Gravity Forms Extension for LSAMP
 Description: Provides functions for use in uPay implementation for LSAMP.
-Version: 2.0.21
+Version: 1.6
 Original Author: David Lentz, David Ferro
 */
 
@@ -17,6 +17,24 @@ $updater->set_username( 'qsopht' );
 $updater->set_repository( 'kfbs_test_touchnet' );
 $updater->initialize();
 
+
+	function receive_touchnet_data( $atts ) {
+		//shortcode may not need attributes
+		//UPAY_SITE_ID=61&EXT_TRANS_ID=12345
+		$transid = $_REQUEST['EXT_TRANS_ID'];
+		$tpg_trans_id = $_REQUEST['tpg_trans_id'];
+		$sys_tracking_id = $_REQUEST['sys_tracking_id'];
+		$upaysite = $_REQUEST['UPAY_SITE_ID'];
+		$post_id = wp_insert_post(array (
+			'post_type' => '',
+			'post_title' => 'Posted from TouchNet',
+			'post_content' => 'Transaction ID: ' . $transid . ' - tpg trans id: ' . $tpg_trans_id . '.',
+			'post_status' => 'publish',
+			'comment_status' => 'closed',   // if you prefer
+			'ping_status' => 'closed',      // if you prefer
+		 ));
+
+	}
 	// This is triggered when the shortcode 'UPAYFORM' is added to a page in WordPress.
 	// Writes a form full of hidden fields and auto-submits it (via javascript).
 	// If javascript isn't available, displays the form in the browser with a submit 
@@ -75,6 +93,7 @@ $updater->initialize();
 	// This makes the shortcode available to WP users. When they put that string on a page, 
 	// the form defined in createForm_LSAMP() appears there.
 	add_shortcode('UPAYFORM', 'createForm_KFBS_TEST');
+	add_shortcode('TOUCHNETLANDING', 'receive_touchnet_data');
 
 	// Populates hidden field in the GravityForm. This'll be the same value as we populate
 	// in the EXT_TRANS_ID hidden field we submit to uPay.

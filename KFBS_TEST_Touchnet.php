@@ -26,14 +26,14 @@ $updater->initialize();
 		$sys_tracking_id = $_REQUEST['sys_tracking_id'];
 		$upaysite = $_REQUEST['UPAY_SITE_ID'];
 		$post_id = wp_insert_post(array (
-			'post_type' => '',
+			'post_type' => 'touchnet-log',
 			'post_title' => 'Posted from TouchNet',
 			'post_content' => 'Transaction ID: ' . $transid . ' - tpg trans id: ' . $tpg_trans_id . '.',
 			'post_status' => 'publish',
 			'comment_status' => 'closed',   // if you prefer
 			'ping_status' => 'closed',      // if you prefer
 		 ));
-
+		 echo $post_id;
 	}
 	// This is triggered when the shortcode 'UPAYFORM' is added to a page in WordPress.
 	// Writes a form full of hidden fields and auto-submits it (via javascript).

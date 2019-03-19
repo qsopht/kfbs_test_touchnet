@@ -42,10 +42,10 @@ $updater->initialize();
 	// button so the user can click to continue.
 	function createForm_KFBS_TEST( $atts ) {
 	
-		$discount_code = $_REQUEST['discount-code'];
+		$discount_code = $_REQUEST['discountcode'];
 
 		$args = array(
-			'post_type'  => 'discount-code',
+			'post_type'  => 'discountcode',
 			'meta_query' => array(
 				array(
 					'key'     => 'code',
@@ -58,9 +58,10 @@ $updater->initialize();
 
 		$post = $query->the_post();
 
-		$discount_amt = get_post_meta( $post->ID, 'discount-amount', true );
+		$discount_amt = get_post_meta( $post->ID, 'discountamount', true );
 
-		echo 'discount-amount = ' . $discount_amt;
+		echo 'discountcode = ' . $discount_code;
+		echo 'discountamount = ' . $discount_amt;
 
 		// $post = get_posts(array(
 		// 	'numberposts'	=> 1,
@@ -128,7 +129,7 @@ $updater->initialize();
 		
 		// Form will auto-submit. User should never see it, but will be forwarded to upay 
 		// with all the data they've already posted.
-		$formString .= '<script type="text/javascript">document.forms["upay"].submit();</script>';
+		//$formString .= '<script type="text/javascript">document.forms["upay"].submit();</script>';
 		
 		echo $formString;
 

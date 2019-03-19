@@ -111,6 +111,10 @@ $updater->initialize();
 		$formString = '<form id="upay" name="upay" action="' . $attributes[ 'upay_url' ] . '" method="post">';
 		$formString .= '<input type="hidden" name="UPAY_SITE_ID" VALUE="' . $attributes[ 'upay_site_id' ] . '" />';
 		$formString .= '<input type="hidden" name="EXT_TRANS_ID" VALUE="'. $_REQUEST['TRANSID'] .'" />';
+
+		$formString .= '<input type="hidden" name="DISCOUNT_AMT" VALUE="'. $discount_amt .'" />';
+		$formString .= '<input type="hidden" name="DISCOUNT_CODE" VALUE="'. $discount_code .'" />';
+
 		$formString .= '<input type="hidden" name="AMT" VALUE="'. $amt .'" />';
 		$formString .= '<input type="hidden" name="VALIDATION_KEY" VALUE="'. $VALIDATION_KEY .'" />';
 		$formString .= '<input type="submit" value="Click here to continue" />';

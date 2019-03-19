@@ -42,6 +42,45 @@ $updater->initialize();
 	// button so the user can click to continue.
 	function createForm_KFBS_TEST( $atts ) {
 	
+		$discount_code = $_REQUEST['discount-code'];
+
+		$args = array(
+			'post_type'  => 'discount-code',
+			'meta_query' => array(
+				array(
+					'key'     => 'code',
+					'value'   => $discount_code,
+					'compare' => 'LIKE',
+				),
+			),
+		);
+		$query = new WP_Query( $args );
+
+		$post = $query->the_post();
+
+		$discount_amt = get_post_meta( $post->ID, 'discount-amount', true );
+
+		echo 'discount-amount = ' . $discount_amt;
+
+		// $post = get_posts(array(
+		// 	'numberposts'	=> 1,
+		// 	'post_type'		=> 'discount-code',
+		// 	'meta_key'		=> 'code',
+		// 	'meta_value'	=> $discount_code
+		// ));
+
+		// $args = array(
+		// 	'post_type' => 'discount-code',
+		// 	'meta_query' => 
+		// 		array(
+		// 			'key' => 'code',
+		// 			'value' => $discount_code,
+		// 			'compare' => 'LIKE'
+		// 	)
+		// );
+		// query_posts( $args ); while ( have_posts() ) : the_post();
+
+
 		// Parse the parameters sent in the shortcode (if any). Allows us to set values 
 		// in WordPress rather than here in the code.
 		$attributes = shortcode_atts( array(

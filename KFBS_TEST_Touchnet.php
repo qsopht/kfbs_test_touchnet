@@ -2,7 +2,7 @@
 /*
 Plugin Name: KFBS Touchnet plugin - based on Boise State uPay Gravity Forms Extension for LSAMP
 Description: Provides functions for use in uPay implementation for LSAMP.
-Version: 1.7.0
+Version: 1.7.1
 Original Author: David Lentz, David Ferro
 */
 

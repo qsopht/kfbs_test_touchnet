@@ -2,8 +2,9 @@
 /*
 Plugin Name: KFBS Touchnet plugin - based on Boise State uPay Gravity Forms Extension for LSAMP
 Description: Provides functions for use in uPay implementation for LSAMP.
-Version: 1.7.5
+Version: 1.7.6
 Original Author: David Lentz, David Ferro
+Updated by: Sam Sawyer
 */
 
 defined( 'ABSPATH' ) or die( 'No hackers' );
@@ -43,25 +44,82 @@ $updater->initialize();
 	function createForm_KFBS_TEST( $atts ) {
 	
 		$discount_code = $_REQUEST['discountcode'];
+        $seminar_post_id = $_REQUEST['seminar_id'];
+
+		//echo '<br/>discountcode = ' . $discount_code.'<br/>';
+
+		// $args = array(
+		// 	'post_type'  => 'discount-code',
+		// 	'meta_query' => array(
+        //                     array (
+		// 		'key'     => 'code',
+        //                         'type' => 'CHAR',
+		// 		'value'   => $discount_code,
+		// 		'compare' => 'LIKE',
+		// 	), 
+        //             ),
+		// );
 
 		$args = array(
-			'post_type'  => 'discountcode',
-			'meta_query' => array(
-				array(
-					'key'     => 'code',
-					'value'   => $discount_code,
-					'compare' => 'LIKE',
-				),
-			),
+			'post_type'  => 'discount-code'
 		);
+
 		$query = new WP_Query( $args );
 
-		$post = $query->the_post();
+		$found_post = false;
+		$discount_amt = 0;
 
-		$discount_amt = get_post_meta( $post->ID, 'discountamount', true );
+		if ( $query->have_posts() ) 
+		{
+			while ( $query->have_posts() ) 
+				{
+				$query->the_post();
+				if ( get_post_meta( $query->post->ID, 'wpcf-code', true ) == $discount_code )
+				{
+					$found_post = true;
+					//echo 'in a post: '.$query->post->ID;
+					//echo '<br/>discount amt: '. get_post_meta($query->post->ID, 'wpcf-discountamount', true) . '<Br/>';
+					//echo 'valid through: ' . get_post_meta($query->post->ID, 'wpcf-discountvalidthrough', true) ;
+					$discount_amt = get_post_meta($query->post->ID, 'wpcf-discountamount', true);
+				}
+			}
+			
+			/* Restore original Post Data */
+			wp_reset_postdata();
+			} else {
+				echo 'no posts<br/>';
+			}
 
-		echo 'discountcode = ' . $discount_code;
-		echo 'discountamount = ' . $discount_amt;
+		if (!$found_post)
+		{
+			echo 'Your discount code is invalid. <a href="javascript:window.history.back();">Go back to try again.</a><br/><br/>';
+		}
+
+
+		$seminar_post = get_post( $seminar_post_id );
+		$seminar_cost = get_post_meta( $seminar_post_id, 'wpcf-seminarcost', true );
+
+		//echo '<br/>seminar: ' . $seminar_post_id;
+		echo '<br/>Seminar cost: ' . $seminar_cost;
+		echo '<br/>Seminar discount: ' . $discount_amt;
+		
+
+//$query = new WP_Query( array( 's' => 'announcement' ) );
+
+//print_r( $args );
+//echo $query;
+//echo 'has post? '.$query->have_posts();
+
+		//$post = $query->the_post();
+
+//echo "post<br/>";
+//echo $post.'<br/>';
+//echo '<br/>post id: '.$query->post->ID.'<br/>';
+
+		//$discount_amt = get_post_meta( $post->ID, 'discountamount', true );
+
+		
+		//echo '<br/>discountamount = ' . $discount_amt;
 
 		// $post = get_posts(array(
 		// 	'numberposts'	=> 1,
@@ -98,14 +156,8 @@ $updater->initialize();
 		
 		$amt = 0;
 
-		// if ($_GET['CC']=='checked'){
-		// 	$amt += 200;
-		// }
-		// if ($_GET['ACN']=='checked'){
-		// 	$amt += 20;
-		// }
-
-		$amt = $_GET['seminar_cost'];
+		$amt = $seminar_cost;
+        $amt = $amt - $discount_amt;
 
 		$VALIDATION_KEY = createValidationKey( $attributes[ 'passed_amount_validation_key' ], $_REQUEST['TRANSID'], $amt );
 
@@ -120,20 +172,22 @@ $updater->initialize();
 		$formString .= '<input type="hidden" name="VALIDATION_KEY" VALUE="'. $VALIDATION_KEY .'" />';
 		$formString .= '<input type="submit" value="Click here to continue" />';
 		$formString .= '</form>';
-		$formString .= 'One moment please...';
+		//$formString .= 'One moment please...';
 		
 		
-		print "<PRE>";
-		print_r($_REQUEST);
-		print "</PRE>";
+		//print "<PRE>";
+		//print_r($_REQUEST);
+		//print "</PRE>";
 		
 		// Form will auto-submit. User should never see it, but will be forwarded to upay 
 		// with all the data they've already posted.
-		//$formString .= '<script type="text/javascript">document.forms["upay"].submit();</script>';
-		
+		if ($found_post)
+		{
+			$formString .= '<script type="text/javascript">document.forms["upay"].submit();</script>';
+		}		
 		echo $formString;
 
-	}
+	} // end create form
 	
 	// This makes the shortcode available to WP users. When they put that string on a page, 
 	// the form defined in createForm_LSAMP() appears there.
